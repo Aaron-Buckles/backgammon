@@ -1,24 +1,5 @@
 #include "Moves.h"
 
-void Moves::compute_moves()
-{
-	set_to_zero( possibleMoves, 4 );
-
-	if ( movesRemaining[0] == movesRemaining[1] )
-	{
-		for ( int i = 1; i < 5; ++i )
-		{
-			possibleMoves[i] = movesRemaining[0] * i;
-		}
-	}
-	else
-	{
-		possibleMoves[0] = movesRemaining[0];
-		possibleMoves[1] = movesRemaining[1];
-		possibleMoves[2] = movesRemaining[0] + movesRemaining[1];	
-	}
-}
-
 void Moves::set_to_zero( int* arr, int size )
 {
 	for ( int i = 0; i < size; ++i )
@@ -30,7 +11,6 @@ void Moves::set_to_zero( int* arr, int size )
 Moves::Moves()
 {
 	set_to_zero( movesRemaining, 4 );
-	set_to_zero( possibleMoves, 4 );
 }
 
 Moves::Moves( const Moves& m )
@@ -38,7 +18,6 @@ Moves::Moves( const Moves& m )
 	for ( int i = 0; i < 4; ++i )
 	{
 		movesRemaining[i] = m.movesRemaining[i];
-		possibleMoves[i] = m.possibleMoves[i];
 	}
 }
 
@@ -47,7 +26,6 @@ Moves& Moves::operator = ( const Moves& m )
 	for ( int i = 0; i < 4; ++i )
 	{
 		movesRemaining[i] = m.movesRemaining[i];
-		possibleMoves[i] = m.possibleMoves[i];
 	}
 	return *this;
 }
@@ -67,7 +45,7 @@ bool Moves::can_move_distance( int distance )
 {
 	for ( int i = 0; i < 4; ++i )
 	{
-		if ( possibleMoves[i] == distance ) return true;
+		if ( movesRemaining[i] == distance ) return true;
 	}
 	return false;
 }
@@ -84,8 +62,6 @@ void Moves::from_roll( int roll1, int roll2 )
 		movesRemaining[2] = roll1;
 		movesRemaining[3] = roll1;
 	}
-
-	compute_moves();
 }
 
 void Moves::checker_moved( int distance )
@@ -117,6 +93,4 @@ void Moves::checker_moved( int distance )
 			}
 		}
 	}
-
-	compute_moves();
 }

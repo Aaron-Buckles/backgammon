@@ -78,8 +78,10 @@ class BackgammonUI
 
 	void draw_bar( )
 	{
-		for ( int i = 0; i < backgammon.checkers_on_bar(true); ++i ) std::cout << symbol( true ) << std::endl;
-		for ( int i = 0; i < backgammon.checkers_on_bar(false); ++i ) std::cout << symbol( false ) << std::endl;
+		for ( int i = 0; i < backgammon.checkers_on_bar(true); ++i ) std::cout << symbol( true );
+		std::cout << "\n";
+		for ( int i = 0; i < backgammon.checkers_on_bar(false); ++i ) std::cout << symbol( false );
+		std::cout << "\n";
 	}
 
 	char symbol( bool player )

@@ -15,15 +15,5 @@ Point::~Point() {}
 
 bool Point::is_blot( bool p )
 {
-	return p != player && amount == 1;
-}
-
-bool Point::is_open()
-{
-	return amount == 0;
-}
-
-bool Point::has_checkers( bool p, int n = 1 )
-{
-	return p == player && amount >= n; 
+	return player != p && amount == 1;
 }

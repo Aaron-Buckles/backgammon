@@ -1,3 +1,5 @@
+#define DEBUG true
+
 #include "Dice.cpp"
 #include "Point.cpp"
 #include "Moves.cpp"

@@ -1,9 +1,7 @@
 class Moves
 {
 	int movesRemaining[4];
-	int possibleMoves[4];
 
-	void compute_moves();
 	void set_to_zero( int* arr, int size );
 
 public:

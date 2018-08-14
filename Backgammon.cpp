@@ -87,6 +87,7 @@ int Backgammon::checkers_on_bar( bool p )
 	return p ? player1Captured : player2Captured;
 }
 
+// TODO: Make this function not loop through EVERY point
 bool Backgammon::player_has_moves( bool p )
 {
 	if ( !moves.has_moves() )
@@ -96,7 +97,7 @@ bool Backgammon::player_has_moves( bool p )
 
 	for ( int from = 0; from < TOTAL_POINTS; ++from )
 	{
-		if ( board[ from ].has_checkers(p) )
+		if ( board[ from ].player == p && board[ from ].amount > 0 )
 		{
 			if ( p )
 			{
@@ -118,53 +119,84 @@ bool Backgammon::player_has_moves( bool p )
 	return false;
 }
 
+// ---------- THE PROBLEM FUNCTIONS :( ----------
+
 bool Backgammon::can_move_checker( bool p, int from, int to )
 {
-	// can only bear off if all checkers are home
-	if ( to == 0 || to == TOTAL_POINTS - 1 )
+	// The player must have a checker on the point they're moving from
+	if ( from == 0 || from == TOTAL_POINTS - 1 )
 	{
-		if ( !all_checkers_home(p) )
+		if ( (p && player1Captured <= 0) || (!p && player2Captured <= 0) ) 
 		{
+			if (DEBUG) std::cout << "Player does not have checkers on the bar" << std::endl;
+			return false;
+		}
+	}
+	else
+	{
+		if ( !has_checker_on_point( p, from ) ) 
+		{
+			if (DEBUG) std::cout << "Player does not have checker on this point" << std::endl;
 			return false;
 		}
 	}
 
-	// check the direction
-	if ( p )
+	// Can only bear off if all checkers are home
+	if ( to == 0 || to == TOTAL_POINTS - 1 )
 	{
-		if ( from >= to ) return false;
-	}
-	else
-	{
-		if ( from <= to ) return false;
+		if ( !all_checkers_home(p) )
+		{
+			if (DEBUG) std::cout << "Cannot bear off because not all checkers are home" << std::endl;
+			return false;
+		}
 	}
 
-	if ( !has_checker_on_point( p, from ) ) return false;
-	if ( !moves.can_move_distance( std::abs(from - to) ) ) return false;
-	if ( has_checker_on_point( !p, to ) ) return false;
+	// Check the direction
+	if ( (p && from >= to) || (!p && from <= to) )
+	{
+		if (DEBUG) std::cout << "Wrong direction" << std::endl;
+		return false;
+	}
+
+	// Check that the checker can move this distance
+	if ( !moves.can_move_distance( std::abs(from - to) ) ) 
+	{
+		if (DEBUG) std::cout << "Cannot move distance of " << std::abs(from - to) << std::endl;
+		return false;
+	}
+
+	// The player can only move to a point that is NOT controlled by the OTHER player
+	if ( board[to].player == !p && board[to].amount > 1 )
+	{
+		if (DEBUG) std::cout << "The point moving to is controlled by the other player" << std::endl;
+		return false;
+	}
 
 	return true;
-}
-
-bool Backgammon::game_over()
-{
-	return board[ TOTAL_POINTS - 1 ].amount == 15 || board[0].amount == 15;
 }
 
 bool Backgammon::has_checker_on_point( bool p, int point )
 {
 	if ( point > 0 && point < TOTAL_POINTS - 1 )
 	{
-		return board[ point ].has_checkers( p );
+		return board[point].player == p && board[point].amount > 0;
+		// return board[ point ].has_checkers( p );
 	}
 	return false;
 }
 
 void Backgammon::move_checker( bool p, int from, int to )
 {
-	--board[ from ].amount;
+	if ( from != 0 && from != TOTAL_POINTS - 1 )
+	{
+		--board[ from ].amount;
+	}
+	else
+	{
+		p ? --player1Captured : --player2Captured;
+	}
 
-	if ( board[ to ].is_blot( p ) )
+	if ( board[ to ].is_blot(p) )
 	{
 		p ? ++player2Captured : ++player1Captured;
 	}
@@ -177,6 +209,8 @@ void Backgammon::move_checker( bool p, int from, int to )
 	moves.checker_moved( std::abs( from - to ) );
 }
 
+// ---------- END ----------
+
 void Backgammon::rolled( int roll1, int roll2 )
 {
 	moves.from_roll( roll1, roll2 );
@@ -185,4 +219,9 @@ void Backgammon::rolled( int roll1, int roll2 )
 void Backgammon::next_player()
 {
 	player = !player;
+}
+
+bool Backgammon::game_over()
+{
+	return board[ TOTAL_POINTS - 1 ].amount == 15 || board[0].amount == 15;
 }
