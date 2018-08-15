@@ -66,31 +66,12 @@ void Moves::from_roll( int roll1, int roll2 )
 
 void Moves::checker_moved( int distance )
 {
-	if ( movesRemaining[0] == movesRemaining[1] )
+	for ( int i = 0; i < 4; ++i )
 	{
-		// the player had doubles
-		int movesToRemove = distance / movesRemaining[0];
-		for ( int i = 4; i > 4 - movesToRemove; --i )
+		if ( movesRemaining[i] == distance )
 		{
 			movesRemaining[i] = 0;
-		}
-	}
-	else
-	{
-		if ( movesRemaining[0] + movesRemaining[1] == distance )
-		{
-			set_to_zero( movesRemaining, 4 );
-		}
-		else
-		{
-			for ( int i = 0; i < 2; ++i )
-			{
-				if ( movesRemaining[i] == distance )
-				{
-					movesRemaining[i] = 0;
-					break;
-				}
-			}
+			break;
 		}
 	}
 }

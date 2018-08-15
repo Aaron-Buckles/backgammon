@@ -1,4 +1,4 @@
-#define DEBUG true
+#define DEBUG false
 
 #include "Dice.cpp"
 #include "Point.cpp"

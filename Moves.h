@@ -1,10 +1,7 @@
-class Moves
+struct Moves
 {
 	int movesRemaining[4];
 
-	void set_to_zero( int* arr, int size );
-
-public:
 	Moves();
 	Moves( const Moves& m );
 	Moves& operator = ( const Moves& m );
@@ -15,4 +12,7 @@ public:
 
 	void from_roll( int roll1, int roll2 );
 	void checker_moved( int distance );
+	
+private:
+	void set_to_zero( int* arr, int size );
 };

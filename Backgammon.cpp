@@ -87,14 +87,37 @@ int Backgammon::checkers_on_bar( bool p )
 	return p ? player1Captured : player2Captured;
 }
 
-// TODO: Make this function not loop through EVERY point
 bool Backgammon::player_has_moves( bool p )
 {
+	// Don't waste any time checking because the player ran out of rolls
 	if ( !moves.has_moves() )
 	{
+		if (DEBUG) std::cout << "The player does not have any rolls left" << std::endl;
 		return false;
 	}
 
+	// When the player has checkers on the bar
+	if ( (p && player1Captured > 0) || (!p && player2Captured > 0) )
+	{
+		std::cout << "Player has checkers on bar" << std::endl;
+		for ( int i = 0; i < 4; ++i )
+		{
+			int pointIndex = p ? (moves.movesRemaining[i]) : (TOTAL_POINTS - moves.movesRemaining[i] - 1);
+			if ( pointIndex == 0 || pointIndex == TOTAL_POINTS - 1 ) continue;
+			std::cout << "PointIndex: " << pointIndex << std::endl;
+
+			if ( board[pointIndex].player == p || board[pointIndex].amount <= 1 )
+			{
+				return true;
+			}
+		}
+
+		if (DEBUG) std::cout << "The player cannot move its checker off the bar" << std::endl;
+		return false;
+	}
+
+	// Brute force checking of all from all points to all points
+	// TODO: Find a better/more efficient solution
 	for ( int from = 0; from < TOTAL_POINTS; ++from )
 	{
 		if ( board[ from ].player == p && board[ from ].amount > 0 )
@@ -119,8 +142,7 @@ bool Backgammon::player_has_moves( bool p )
 	return false;
 }
 
-// ---------- THE PROBLEM FUNCTIONS :( ----------
-
+// TODO: Make this member function smaller (break up into functions)
 bool Backgammon::can_move_checker( bool p, int from, int to )
 {
 	// The player must have a checker on the point they're moving from
@@ -180,13 +202,13 @@ bool Backgammon::has_checker_on_point( bool p, int point )
 	if ( point > 0 && point < TOTAL_POINTS - 1 )
 	{
 		return board[point].player == p && board[point].amount > 0;
-		// return board[ point ].has_checkers( p );
 	}
 	return false;
 }
 
 void Backgammon::move_checker( bool p, int from, int to )
 {
+	// Remove a checker from the point the player is moving from
 	if ( from != 0 && from != TOTAL_POINTS - 1 )
 	{
 		--board[ from ].amount;
@@ -196,6 +218,8 @@ void Backgammon::move_checker( bool p, int from, int to )
 		p ? --player1Captured : --player2Captured;
 	}
 
+	// Add a checker to the point the player is moving to
+	// or if landing on a blot, add to the other players bar
 	if ( board[ to ].is_blot(p) )
 	{
 		p ? ++player2Captured : ++player1Captured;
@@ -206,10 +230,20 @@ void Backgammon::move_checker( bool p, int from, int to )
 	}
 	board[ to ].player = p;
 
+	// Update the Moves object with the distance moved
 	moves.checker_moved( std::abs( from - to ) );
-}
 
-// ---------- END ----------
+	if (DEBUG)
+	{
+		std::cout << "Moves Remaining: ";
+		for ( int i = 0; i < 4; ++i )
+		{
+			if ( moves.movesRemaining[i] != 0 )
+				std::cout << moves.movesRemaining[i] << " ";
+		} 
+		std::cout << "\n";
+	}
+}
 
 void Backgammon::rolled( int roll1, int roll2 )
 {
