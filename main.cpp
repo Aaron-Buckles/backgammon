@@ -173,10 +173,7 @@ class BackgammonUI
 				backgammon.move_checker( backgammon.player, from, to );
 			}
 
-			std::cout << "Next player" << std::endl;
-			std::cout << backgammon.player << std::endl;
 			backgammon.next_player();
-			std::cout << backgammon.player << std::endl;
 			roll();
 		}
 
