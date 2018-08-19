@@ -181,10 +181,20 @@ bool Backgammon::can_move_checker( bool p, int from, int to )
 	}
 
 	// Check that the checker can move this distance
-	if ( !moves.can_move_distance( std::abs(from - to) ) ) 
+	if ( !moves.can_move_exact_distance( std::abs(from - to) ) ) 
 	{
-		if (DEBUG) std::cout << "Cannot move distance of " << std::abs(from - to) << std::endl;
-		return false;
+		if ( to == 0 || to == TOTAL_POINTS - 1 )
+		{
+			if ( !moves.can_move_distance( std::abs(from - to) ) )
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (DEBUG) std::cout << "Cannot move distance of " << std::abs(from - to) << std::endl;
+			return false;
+		}
 	}
 
 	// The player can only move to a point that is NOT controlled by the OTHER player

@@ -41,11 +41,20 @@ bool Moves::has_moves()
 	return false;
 }
 
-bool Moves::can_move_distance( int distance )
+bool Moves::can_move_exact_distance( int distance )
 {
 	for ( int i = 0; i < 4; ++i )
 	{
 		if ( movesRemaining[i] == distance ) return true;
+	}
+	return false;
+}
+
+bool Moves::can_move_distance( int distance )
+{
+	for ( int i = 0; i < 4; ++i )
+	{
+		if ( movesRemaining[i] >= distance ) return true;
 	}
 	return false;
 }
