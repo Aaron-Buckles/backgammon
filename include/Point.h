@@ -1,3 +1,6 @@
+#ifndef POINT_H
+#define POINT_H
+
 struct Point
 {
 	bool player;
@@ -10,3 +13,5 @@ struct Point
 
 	bool is_blot( bool p );
 };
+
+#endif

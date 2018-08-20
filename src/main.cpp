@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "Dice.cpp"
 #include "Backgammon.cpp"
 
 class BackgammonUI

@@ -1,3 +1,6 @@
+#ifndef DICE_H
+#define DICE_H
+
 #include <random>
 #include <chrono>
 
@@ -11,3 +14,5 @@ public:
 	int roll();
 	~Dice();
 };
+
+#endif

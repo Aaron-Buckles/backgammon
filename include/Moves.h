@@ -1,3 +1,6 @@
+#ifndef MOVES_H
+#define MOVES_H
+
 struct Moves
 {
 	int movesRemaining[4];
@@ -17,3 +20,5 @@ struct Moves
 private:
 	void set_to_zero( int* arr, int size );
 };
+
+#endif

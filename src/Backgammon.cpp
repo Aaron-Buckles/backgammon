@@ -1,4 +1,8 @@
-#include "Backgammon.h"
+#include "../include/Backgammon.h"
+
+#include <cmath>
+#include "Point.cpp"
+#include "Moves.cpp"
 
 void Backgammon::setup_board()
 {

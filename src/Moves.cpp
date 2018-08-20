@@ -1,4 +1,4 @@
-#include "Moves.h"
+#include "../include/Moves.h"
 
 void Moves::set_to_zero( int* arr, int size )
 {

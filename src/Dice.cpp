@@ -1,4 +1,4 @@
-#include "Dice.h"
+#include "../include/Dice.h"
 
 Dice::Dice( int min, int max ) : engine(), distribution( std::uniform_int_distribution<int>(min, max) ) 
 {

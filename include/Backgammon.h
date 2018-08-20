@@ -1,10 +1,11 @@
-#define DEBUG false
+#ifndef BACKGAMMON_H
+#define BACKGAMMON_H
 
-#include "Dice.cpp"
-#include "Point.cpp"
-#include "Moves.cpp"
-#include <cmath>
+#define DEBUG false
 #define TOTAL_POINTS 26
+
+#include "../include/Point.h"
+#include "../include/Moves.h"
 
 class Backgammon
 {
@@ -38,3 +39,5 @@ public:
 	void rolled( int roll1, int roll2 );
 	void next_player();
 };
+
+#endif

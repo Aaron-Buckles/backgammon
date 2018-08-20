@@ -1,4 +1,4 @@
-#include "Point.h"
+#include "../include/Point.h"
 
 Point::Point( bool initialPlayer = true, bool initialAmount = 0 ) : player( initialPlayer ), amount( initialAmount ) {}
 
